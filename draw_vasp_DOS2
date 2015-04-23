@@ -1,0 +1,26 @@
+#!/bin/csh
+# Usage: draw_vasp_DOS2 (input: ./dos.out, output: ./dos.eps)
+#        draw_vasp_DOS2 target_eps
+#        draw_vasp_DOS2 datafile target_eps
+
+if ($#argv == 0) then 
+ set IN  = ./dos.out
+ set OUT = ./dos.eps
+else if ($#argv == 1) then 
+ set IN  = ./dos.out
+ set OUT = "$argv[1]"
+else
+ set IN  = "$argv[1]"
+ set OUT = "$argv[2]"
+endif
+
+cat <<EOF | gnuplot > $OUT
+set term postscript eps color
+set yrange [0:]
+# set linestyle 1 linewidth 4 #
+# set linestyle 2 linewidth 4 pt 6 #
+set style line 1 lw 4
+set style line 2 lw 4 pt 6
+plot "$IN" u 1:2 title "spin-up"   with linespoints linestyle 1, \
+     "$IN" u 1:3 title "spin-down" with linespoints linestyle 2
+EOF

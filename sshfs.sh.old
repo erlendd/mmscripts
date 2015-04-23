@@ -1,0 +1,75 @@
+#! /bin/bash
+
+
+echo "hector..."
+n=`mount | grep -c /mnt/sshfs/hector`
+if [ $n -lt 1 ]; then
+  sshfs -o follow_symlinks phase2b.hector.ac.uk: /mnt/sshfs/hector &
+fi
+
+echo "legion..."
+n=`mount | grep -c /mnt/sshfs/legion`
+if [ $n -lt 1 ]; then
+  sshfs -o follow_symlinks uccaeda@legion.rc.ucl.ac.uk: /mnt/sshfs/legion &
+fi
+
+echo "unity..."
+n=`mount | grep -c /mnt/sshfs/unity`
+if [ $n -lt 1 ]; then
+  sshfs -o follow_symlinks uccaeda@unity.rc.ucl.ac.uk: /mnt/sshfs/unity &
+fi
+
+echo "ironhill..."
+n=`mount | grep -c /mnt/sshfs/ironhill`
+if [ $n -lt 1 ]; then
+  sshfs -o follow_symlinks ermd@ironhill.lcn.ucl.ac.uk: /mnt/sshfs/ironhill &
+fi
+
+echo "ice..."
+n=`mount | grep -c /mnt/sshfs/brown`
+if [ $n -lt 1 ]; then
+  sshfs -o follow_symlinks,allow_root \
+           ermd@galaxy.lcn.ucl.ac.uk: /mnt/sshfs/brown &
+fi
+
+echo "cheme131..."
+n=`mount | grep -c /mnt/sshfs/cheme131`
+if [ $n -lt 1 ]; then
+  sshfs -o follow_symlinks \
+           cheme131: /mnt/sshfs/cheme131 &
+fi
+
+echo "cheme137..."
+n=`mount | grep -c /mnt/sshfs/cheme137`
+if [ $n -lt 1 ]; then
+  sshfs -o follow_symlinks \
+           cheme137: /mnt/sshfs/cheme137 &
+fi
+
+echo "cheme140..."
+n=`mount | grep -c /mnt/sshfs/cheme140`
+if [ $n -lt 1 ]; then
+  sshfs -o follow_symlinks \
+           cheme140: /mnt/sshfs/cheme140 &
+fi
+
+echo "cheme142..."
+n=`mount | grep -c /mnt/sshfs/cheme142`
+if [ $n -lt 1 ]; then
+  sshfs -o follow_symlinks \
+           cheme142: /mnt/sshfs/cheme142 &
+fi
+
+echo "cheme133..."
+n=`mount | grep -c /mnt/sshfs/cheme133`
+if [ $n -lt 1 ]; then
+  sshfs -o follow_symlinks \
+           cheme133: /mnt/sshfs/cheme133 &
+fi
+
+wait
+
+echo
+echo "The following sshfs mounts are active"
+mount | grep /mnt/sshfs | awk '{print $3}'
+

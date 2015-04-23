@@ -1,0 +1,40 @@
+#!/bin/csh
+# Split concatenated DOSCAR file into distinct directory for each step.
+# Original version in http://cst-www.nrl.navy.mil/~erwin/vasptips/
+
+rm -rf DOS
+mkdir DOS
+
+set dosfile = DOSCAR
+
+set nl = `sed -n '6 p' $dosfile | awk '{print $3}'`
+
+set step = 0
+set start = 7
+@ end = $start + $nl - 1
+
+@ wcl = `wc -l $dosfile | awk '{print $1}'`
+
+while ( $end <= $wcl )
+
+ set stepper = `echo $step | awk '{printf "%05d\n", $1}'`
+
+ mkdir DOS/$stepper
+
+@ startheader = $start - 1
+
+ set efermi = `sed -n ''$startheader' p' $dosfile | awk '{print $4}'`
+
+ sed -n ''$start','$end' p' $dosfile | \
+ awk '{printf "%12.8f %12.8f %12.8f \n", $1-('$efermi'), $2, $3 }' \
+ >> DOS/$stepper/dos.out
+
+ echo Step $step, efermi = $efermi, total DOS -\> DOS/$stepper/dos.out
+
+@ start = $end + 2
+
+@ end = $start + $nl - 1
+
+@ step = $step + 1
+
+end

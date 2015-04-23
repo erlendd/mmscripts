@@ -1,0 +1,14 @@
+#!/bin/csh
+#vasp2dos2: draw VASP's spin-polarized density of states using gnuplot
+
+split_vasp_DOS
+
+cd DOS
+
+foreach dosdir ( * )
+ cd $dosdir
+ draw_vasp_DOS2
+ cd ..
+end
+
+ln -sf $dosdir/dos.eps final.eps
